@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useLocation, Link } from 'wouter';
 import { useAuth } from '@/context/auth-context';
 import { 
@@ -33,16 +33,19 @@ export function Layout({ children }: { children: React.ReactNode }) {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
 
   // Redirect to auth if not logged in
-  if (!isLoading && !user) {
-    setLocation('/auth');
-    return null;
-  }
+  useEffect(() => {
+    if (!isLoading && !user) {
+      setLocation('/auth');
+    }
+  }, [isLoading, user, setLocation]);
 
   if (isLoading) {
     return <div className="min-h-screen flex items-center justify-center bg-background">
       <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
     </div>;
   }
+
+  if (!user) return null;
 
   const NavItem = ({ href, icon: Icon, label }: { href: string; icon: any; label: string }) => {
     const isActive = location === href;

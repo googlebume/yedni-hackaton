@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useAuth } from '@/context/auth-context';
 import { useLocation } from 'wouter';
 import { Button } from '@/components/ui/button';
@@ -13,8 +13,13 @@ export default function AuthPage() {
   const { login, register, isLoading, user } = useAuth();
   const [, setLocation] = useLocation();
 
+  useEffect(() => {
+    if (user) {
+      setLocation('/');
+    }
+  }, [user, setLocation]);
+
   if (user) {
-    setLocation('/');
     return null;
   }
 
