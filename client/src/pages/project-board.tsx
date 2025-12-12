@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useAuth } from '@/context/auth-context';
 import { KanbanBoard } from '@/components/kanban-board';
 import { ProjectDetailsModal } from '@/components/project-details-modal';
-import { CreateProjectWizard } from '@/components/create-project-wizard';
+import { CreateProjectWizard } from '../components/create-project-wizard';
 import { Project } from '@/lib/mock-data';
 import { Button } from '@/components/ui/button';
 import { Plus, Filter } from 'lucide-react';
