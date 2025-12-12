@@ -1,6 +1,6 @@
 import { nanoid } from 'nanoid';
 
-export type UserType = 'ORGANIZATION' | 'DONOR';
+export type UserType = 'ORGANIZATION' | 'DONOR' | 'INVESTOR';
 
 export interface User {
   id: string;
@@ -10,6 +10,8 @@ export interface User {
   isDiiaVerified: boolean;
   avatar?: string;
   createdAt: string;
+  description?: string; // For landing page showcase
+  logo?: string; // For organizations/investors
 }
 
 export type ProjectStatus = 'DRAFT' | 'FUNDING' | 'IN_PROGRESS' | 'COMPLETED';
@@ -27,6 +29,16 @@ export interface Budget {
   amount: number;
 }
 
+export interface Comment {
+  id: string;
+  userId: string;
+  userName: string;
+  userAvatar?: string;
+  text: string;
+  createdAt: string;
+  likes: number;
+}
+
 export interface Project {
   id: string;
   title: string;
@@ -41,6 +53,10 @@ export interface Project {
   timeline: ProjectTimeline[];
   budget: Budget[];
   coverImage?: string;
+  location: string; // Hromada/Community
+  likes: number;
+  comments: Comment[];
+  isRecommended?: boolean;
 }
 
 export interface Donation {
@@ -51,6 +67,18 @@ export interface Donation {
   createdAt: string;
 }
 
+export interface Grant {
+  id: string;
+  title: string;
+  description: string;
+  amount: number;
+  providerId: string;
+  providerName: string;
+  deadline: string;
+  categories: string[];
+  requirements: string[];
+}
+
 export const CATEGORIES = [
   'Medical Aid',
   'Military Support',
@@ -59,7 +87,22 @@ export const CATEGORIES = [
   'Education',
   'Reconstruction',
   'Children',
-  'Elderly Care'
+  'Elderly Care',
+  'Infrastructure',
+  'Culture'
+];
+
+export const LOCATIONS = [
+  'Kyiv',
+  'Lviv',
+  'Kharkiv',
+  'Dnipro',
+  'Odesa',
+  'Bucha',
+  'Irpin',
+  'Mariupol (Support)',
+  'Kherson',
+  'Zaporizhzhia'
 ];
 
 export const MOCK_USERS: User[] = [
@@ -71,6 +114,7 @@ export const MOCK_USERS: User[] = [
     isDiiaVerified: true,
     avatar: 'https://ui-avatars.com/api/?name=Come+Back+Alive&background=0D8ABC&color=fff',
     createdAt: new Date().toISOString(),
+    description: 'One of the largest foundations providing competent assistance to the military.'
   },
   {
     id: 'org-2',
@@ -80,15 +124,42 @@ export const MOCK_USERS: User[] = [
     isDiiaVerified: true,
     avatar: 'https://ui-avatars.com/api/?name=Prytula+Foundation&background=0D8ABC&color=fff',
     createdAt: new Date().toISOString(),
+    description: 'Focuses on strengthening the Defense Forces of Ukraine and civilian aid.'
   },
   {
-    id: 'donor-1',
-    email: 'donor@example.com',
-    name: 'Alex Donor',
-    type: 'DONOR',
-    isDiiaVerified: false,
-    avatar: 'https://ui-avatars.com/api/?name=Alex+Donor&background=random',
+    id: 'investor-1',
+    email: 'grants@us-aid.org',
+    name: 'US Aid Direct',
+    type: 'INVESTOR',
+    isDiiaVerified: true,
+    avatar: 'https://ui-avatars.com/api/?name=US+Aid&background=ef4444&color=fff',
     createdAt: new Date().toISOString(),
+    description: 'Supporting democratic resilience and economic recovery.'
+  }
+];
+
+export const MOCK_GRANTS: Grant[] = [
+  {
+    id: 'grant-1',
+    title: 'Community Resilience Fund',
+    description: 'Grants for projects aiming to rebuild local infrastructure and community centers in de-occupied territories.',
+    amount: 5000000,
+    providerId: 'investor-1',
+    providerName: 'US Aid Direct',
+    deadline: '2025-12-31',
+    categories: ['Reconstruction', 'Infrastructure'],
+    requirements: ['Registered NGO', '2+ years experience', 'Clear impact metrics']
+  },
+  {
+    id: 'grant-2',
+    title: 'Educational Tech Initiative',
+    description: 'Funding for supplying schools with modern equipment and internet access.',
+    amount: 2000000,
+    providerId: 'investor-1',
+    providerName: 'US Aid Direct',
+    deadline: '2025-10-15',
+    categories: ['Education', 'Children'],
+    requirements: ['Partnership with local schools', 'Sustainability plan']
   }
 ];
 
@@ -103,7 +174,13 @@ export const MOCK_PROJECTS: Project[] = [
     status: 'FUNDING',
     creatorId: 'org-1',
     creatorName: 'Come Back Alive',
-    createdAt: new Date(Date.now() - 1000 * 60 * 60 * 24 * 5).toISOString(), // 5 days ago
+    createdAt: new Date(Date.now() - 1000 * 60 * 60 * 24 * 5).toISOString(),
+    location: 'Dnipro',
+    likes: 124,
+    comments: [
+      { id: 'c1', userId: 'u1', userName: 'Oleg M.', text: 'Great initiative! Donated.', createdAt: new Date().toISOString(), likes: 5 },
+      { id: 'c2', userId: 'u2', userName: 'Anna K.', text: 'Is there a list of specific tools needed?', createdAt: new Date().toISOString(), likes: 2 }
+    ],
     timeline: [
       { id: 't1', date: '2025-06-01', title: 'Procurement of Vehicles', description: 'Buying 3 unused van chassis' },
       { id: 't2', date: '2025-07-01', title: 'Equipping', description: 'Installing tools and generators' },
@@ -126,6 +203,9 @@ export const MOCK_PROJECTS: Project[] = [
     creatorId: 'org-2',
     creatorName: 'Serhiy Prytula Charity Foundation',
     createdAt: new Date(Date.now() - 1000 * 60 * 60 * 24 * 2).toISOString(),
+    location: 'Kharkiv',
+    likes: 89,
+    comments: [],
     timeline: [
       { id: 't1', date: '2025-05-20', title: 'Sourcing', description: 'Ordering components from suppliers' },
       { id: 't2', date: '2025-06-10', title: 'Assembly', description: 'Assembling kits by volunteers' }
@@ -146,6 +226,10 @@ export const MOCK_PROJECTS: Project[] = [
     creatorId: 'org-1',
     creatorName: 'Come Back Alive',
     createdAt: new Date(Date.now() - 1000 * 60 * 60 * 24 * 45).toISOString(),
+    location: 'Irpin',
+    likes: 450,
+    isRecommended: true,
+    comments: [],
     timeline: [],
     budget: []
   },
@@ -160,6 +244,9 @@ export const MOCK_PROJECTS: Project[] = [
     creatorId: 'org-2',
     creatorName: 'Serhiy Prytula Charity Foundation',
     createdAt: new Date(Date.now() - 1000 * 60 * 60 * 24 * 10).toISOString(),
+    location: 'Kyiv',
+    likes: 210,
+    comments: [],
     timeline: [],
     budget: []
   },
@@ -174,6 +261,9 @@ export const MOCK_PROJECTS: Project[] = [
     creatorId: 'org-1',
     creatorName: 'Come Back Alive',
     createdAt: new Date(Date.now() - 1000 * 60 * 60 * 24 * 1).toISOString(),
+    location: 'Donetsk',
+    likes: 15,
+    comments: [],
     timeline: [],
     budget: []
   },
@@ -188,6 +278,10 @@ export const MOCK_PROJECTS: Project[] = [
     creatorId: 'org-1',
     creatorName: 'Come Back Alive',
     createdAt: new Date(Date.now() - 1000 * 60 * 60 * 24 * 7).toISOString(),
+    location: 'Lviv',
+    likes: 340,
+    isRecommended: true,
+    comments: [],
     timeline: [],
     budget: []
   },
@@ -202,6 +296,9 @@ export const MOCK_PROJECTS: Project[] = [
     creatorId: 'org-2',
     creatorName: 'Serhiy Prytula Charity Foundation',
     createdAt: new Date(Date.now() - 1000 * 60 * 60 * 24 * 3).toISOString(),
+    location: 'Odesa',
+    likes: 56,
+    comments: [],
     timeline: [],
     budget: []
   },
@@ -216,6 +313,10 @@ export const MOCK_PROJECTS: Project[] = [
     creatorId: 'org-1',
     creatorName: 'Come Back Alive',
     createdAt: new Date(Date.now() - 1000 * 60 * 60 * 24 * 20).toISOString(),
+    location: 'Kyiv',
+    likes: 890,
+    isRecommended: true,
+    comments: [],
     timeline: [],
     budget: []
   }

@@ -11,7 +11,8 @@ import {
   Settings, 
   Bell,
   User,
-  ShieldCheck
+  ShieldCheck,
+  DollarSign
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
@@ -83,9 +84,10 @@ export function Layout({ children }: { children: React.ReactNode }) {
       </div>
 
       <div className="flex-1 py-4 px-2 space-y-1">
-        <NavItem href="/" icon={LayoutDashboard} label="Dashboard" />
+        <NavItem href="/dashboard" icon={LayoutDashboard} label="Dashboard" />
         <NavItem href="/projects" icon={KanbanSquare} label="Projects Board" />
         <NavItem href="/discovery" icon={Search} label="Discovery" />
+        <NavItem href="/grants" icon={DollarSign} label="Grants Marketplace" />
       </div>
 
       <div className="p-4 border-t border-sidebar-border mt-auto">

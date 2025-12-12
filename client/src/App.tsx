@@ -11,19 +11,23 @@ import AuthPage from "@/pages/auth";
 import Dashboard from "@/pages/dashboard";
 import ProjectBoardPage from "@/pages/project-board";
 import ProjectDiscoveryPage from "@/pages/project-list";
+import LandingPage from "@/pages/landing";
+import GrantsPage from "@/pages/grants";
 
 function Router() {
   return (
     <Switch>
+      <Route path="/" component={LandingPage} />
       <Route path="/auth" component={AuthPage} />
       
       {/* Protected Routes Wrapper */}
       <Route path="/:rest*">
         <Layout>
           <Switch>
-            <Route path="/" component={Dashboard} />
+            <Route path="/dashboard" component={Dashboard} />
             <Route path="/projects" component={ProjectBoardPage} />
             <Route path="/discovery" component={ProjectDiscoveryPage} />
+            <Route path="/grants" component={GrantsPage} />
             <Route component={NotFound} />
           </Switch>
         </Layout>

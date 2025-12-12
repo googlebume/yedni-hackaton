@@ -7,18 +7,19 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Slider } from '@/components/ui/slider';
-import { Search, Filter, X } from 'lucide-react';
+import { Search, Filter, X, MapPin } from 'lucide-react';
 import { Label } from '@/components/ui/label';
 import { Checkbox } from '@/components/ui/checkbox';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Separator } from '@/components/ui/separator';
-import { CATEGORIES } from '@/lib/mock-data';
+import { CATEGORIES, LOCATIONS } from '@/lib/mock-data';
 
 export default function ProjectDiscoveryPage() {
   const { projects } = useProjects();
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
+  const [selectedLocations, setSelectedLocations] = useState<string[]>([]);
   const [fundingRange, setFundingRange] = useState([0, 2000000]);
 
   // Filter logic
@@ -30,6 +31,10 @@ export default function ProjectDiscoveryPage() {
     }
     // Category
     if (selectedCategories.length > 0 && !selectedCategories.some(c => project.categories.includes(c))) {
+      return false;
+    }
+    // Location
+    if (selectedLocations.length > 0 && !selectedLocations.includes(project.location)) {
       return false;
     }
     // Range (check goal amount)
@@ -50,6 +55,14 @@ export default function ProjectDiscoveryPage() {
     );
   };
 
+  const toggleLocation = (location: string) => {
+    setSelectedLocations(prev => 
+      prev.includes(location) 
+        ? prev.filter(l => l !== location)
+        : [...prev, location]
+    );
+  };
+
   return (
     <div className="flex h-[calc(100vh-8rem)] gap-6">
       {/* Sidebar Filters */}
@@ -59,10 +72,36 @@ export default function ProjectDiscoveryPage() {
             <h3 className="font-semibold mb-4 flex items-center gap-2">
               <Filter className="h-4 w-4" /> Filters
             </h3>
-            <div className="space-y-4">
+            
+            <div className="space-y-6">
+              {/* Location Filter */}
+              <div className="space-y-2">
+                <Label className="flex items-center gap-1"><MapPin className="h-3 w-3" /> Community / Region</Label>
+                <div className="space-y-2 max-h-40 overflow-y-auto pr-2">
+                  {LOCATIONS.map(loc => (
+                    <div key={loc} className="flex items-center space-x-2">
+                      <Checkbox 
+                        id={`loc-${loc}`} 
+                        checked={selectedLocations.includes(loc)}
+                        onCheckedChange={() => toggleLocation(loc)}
+                      />
+                      <label 
+                        htmlFor={`loc-${loc}`} 
+                        className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 cursor-pointer"
+                      >
+                        {loc}
+                      </label>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              <Separator />
+
+              {/* Category Filter */}
               <div className="space-y-2">
                 <Label>Categories</Label>
-                <div className="space-y-2">
+                <div className="space-y-2 max-h-40 overflow-y-auto pr-2">
                   {CATEGORIES.map(category => (
                     <div key={category} className="flex items-center space-x-2">
                       <Checkbox 
@@ -83,6 +122,7 @@ export default function ProjectDiscoveryPage() {
 
               <Separator />
 
+              {/* Funding Range */}
               <div className="space-y-4">
                 <div className="flex justify-between">
                   <Label>Funding Goal</Label>
@@ -104,12 +144,13 @@ export default function ProjectDiscoveryPage() {
             </div>
           </div>
           
-          {(selectedCategories.length > 0 || fundingRange[0] > 0 || fundingRange[1] < 2000000) && (
+          {(selectedCategories.length > 0 || selectedLocations.length > 0 || fundingRange[0] > 0 || fundingRange[1] < 2000000) && (
             <Button 
               variant="outline" 
               className="w-full"
               onClick={() => {
                 setSelectedCategories([]);
+                setSelectedLocations([]);
                 setFundingRange([0, 2000000]);
               }}
             >
@@ -159,6 +200,7 @@ export default function ProjectDiscoveryPage() {
                 onClick={() => {
                   setSearchQuery('');
                   setSelectedCategories([]);
+                  setSelectedLocations([]);
                   setFundingRange([0, 2000000]);
                 }}
               >

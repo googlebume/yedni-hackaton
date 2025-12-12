@@ -1,4 +1,4 @@
-import { Project, Donation } from '@/lib/mock-data';
+import { Project, Donation, Comment } from '@/lib/mock-data';
 import { useProjects } from '@/context/project-context';
 import { useAuth } from '@/context/auth-context';
 import {
@@ -17,8 +17,9 @@ import { Separator } from '@/components/ui/separator';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
-import { Calendar, CheckCircle2, DollarSign, User, AlertCircle } from 'lucide-react';
+import { Calendar, CheckCircle2, DollarSign, User, AlertCircle, MapPin, ThumbsUp, MessageSquare, Send } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
 import { useState } from 'react';
 
@@ -33,6 +34,11 @@ export function ProjectDetailsModal({ project, isOpen, onClose }: ProjectDetails
   const { user } = useAuth();
   const [donationAmount, setDonationAmount] = useState<string>('500');
   const [isConfirming, setIsConfirming] = useState(false);
+  const [activeTab, setActiveTab] = useState('details');
+  const [commentText, setCommentText] = useState('');
+  // Local state for likes/comments interaction demo
+  const [localLikes, setLocalLikes] = useState(project?.likes || 0);
+  const [hasLiked, setHasLiked] = useState(false);
 
   if (!project) return null;
 
@@ -44,8 +50,23 @@ export function ProjectDetailsModal({ project, isOpen, onClose }: ProjectDetails
     setTimeout(() => {
       donate(project.id, Number(donationAmount), user.id);
       setIsConfirming(false);
-      // onClose(); // Optionally close or keep open
     }, 1000);
+  };
+
+  const handleLike = () => {
+    if (hasLiked) {
+      setLocalLikes(prev => prev - 1);
+      setHasLiked(false);
+    } else {
+      setLocalLikes(prev => prev + 1);
+      setHasLiked(true);
+    }
+  };
+
+  const handlePostComment = () => {
+    if (!commentText.trim()) return;
+    // In a real app, this would call an API
+    setCommentText('');
   };
 
   return (
@@ -64,10 +85,13 @@ export function ProjectDetailsModal({ project, isOpen, onClose }: ProjectDetails
                 </Badge>
                 <span className="text-sm text-muted-foreground flex items-center gap-1">
                   <Calendar className="h-3 w-3" />
-                  Created {new Date(project.createdAt).toLocaleDateString()}
+                  {new Date(project.createdAt).toLocaleDateString()}
                 </span>
                 <span className="text-sm text-muted-foreground mx-1">•</span>
-                <span className="text-sm text-muted-foreground">{project.categories.join(', ')}</span>
+                <span className="text-sm text-muted-foreground flex items-center gap-1">
+                  <MapPin className="h-3 w-3" />
+                  {project.location || 'Ukraine'}
+                </span>
               </div>
               
               <DialogTitle className="text-2xl font-bold mb-2">{project.title}</DialogTitle>
@@ -80,7 +104,6 @@ export function ProjectDetailsModal({ project, isOpen, onClose }: ProjectDetails
                   <p className="text-sm font-medium">{project.creatorName}</p>
                   <p className="text-xs text-muted-foreground">Project Creator</p>
                 </div>
-                {/* Mock Verification Badge */}
                 <div className="ml-auto flex items-center text-blue-600 bg-blue-50 px-2 py-1 rounded text-xs font-medium">
                   <CheckCircle2 className="h-3 w-3 mr-1" /> Verified
                 </div>
@@ -89,68 +112,148 @@ export function ProjectDetailsModal({ project, isOpen, onClose }: ProjectDetails
             
             <Separator />
             
-            <ScrollArea className="flex-1">
-              <div className="p-6 space-y-6">
-                <div className="space-y-2">
-                  <h3 className="font-semibold text-lg">Description</h3>
-                  <p className="text-muted-foreground leading-relaxed whitespace-pre-wrap">
-                    {project.description}
-                  </p>
-                </div>
+            <Tabs value={activeTab} onValueChange={setActiveTab} className="flex-1 flex flex-col min-h-0">
+              <div className="px-6 pt-2">
+                <TabsList className="w-full justify-start border-b rounded-none h-auto p-0 bg-transparent">
+                  <TabsTrigger value="details" className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:shadow-none py-2">Details</TabsTrigger>
+                  <TabsTrigger value="updates" className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:shadow-none py-2">Updates</TabsTrigger>
+                  <TabsTrigger value="discussion" className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:shadow-none py-2">Discussion ({project.comments?.length || 0})</TabsTrigger>
+                </TabsList>
+              </div>
 
-                <div className="space-y-2">
-                  <h3 className="font-semibold text-lg">Budget Breakdown</h3>
-                  {project.budget.length > 0 ? (
-                    <div className="border rounded-md">
-                      <table className="w-full text-sm">
-                        <thead className="bg-secondary/30">
-                          <tr className="border-b">
-                            <th className="text-left py-2 px-4 font-medium">Category</th>
-                            <th className="text-right py-2 px-4 font-medium">Amount</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          {project.budget.map((item) => (
-                            <tr key={item.id} className="border-b last:border-0">
-                              <td className="py-2 px-4">{item.category}</td>
-                              <td className="py-2 px-4 text-right">₴{item.amount.toLocaleString()}</td>
-                            </tr>
-                          ))}
-                          <tr className="bg-secondary/10 font-medium">
-                            <td className="py-2 px-4">Total Goal</td>
-                            <td className="py-2 px-4 text-right">₴{project.goalAmount.toLocaleString()}</td>
-                          </tr>
-                        </tbody>
-                      </table>
+              <ScrollArea className="flex-1">
+                <div className="p-6">
+                  <TabsContent value="details" className="mt-0 space-y-6">
+                    <div className="space-y-2">
+                      <h3 className="font-semibold text-lg">Description</h3>
+                      <p className="text-muted-foreground leading-relaxed whitespace-pre-wrap">
+                        {project.description}
+                      </p>
                     </div>
-                  ) : (
-                    <p className="text-sm text-muted-foreground italic">No budget details available.</p>
-                  )}
-                </div>
 
-                <div className="space-y-2">
-                  <h3 className="font-semibold text-lg">Timeline</h3>
-                   {project.timeline.length > 0 ? (
-                    <div className="relative border-l-2 border-muted ml-3 pl-6 space-y-6 my-4">
-                      {project.timeline.map((item) => (
+                    <div className="space-y-2">
+                      <h3 className="font-semibold text-lg">Budget Breakdown</h3>
+                      {project.budget.length > 0 ? (
+                        <div className="border rounded-md">
+                          <table className="w-full text-sm">
+                            <thead className="bg-secondary/30">
+                              <tr className="border-b">
+                                <th className="text-left py-2 px-4 font-medium">Category</th>
+                                <th className="text-right py-2 px-4 font-medium">Amount</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              {project.budget.map((item) => (
+                                <tr key={item.id} className="border-b last:border-0">
+                                  <td className="py-2 px-4">{item.category}</td>
+                                  <td className="py-2 px-4 text-right">₴{item.amount.toLocaleString()}</td>
+                                </tr>
+                              ))}
+                              <tr className="bg-secondary/10 font-medium">
+                                <td className="py-2 px-4">Total Goal</td>
+                                <td className="py-2 px-4 text-right">₴{project.goalAmount.toLocaleString()}</td>
+                              </tr>
+                            </tbody>
+                          </table>
+                        </div>
+                      ) : (
+                        <p className="text-sm text-muted-foreground italic">No budget details available.</p>
+                      )}
+                    </div>
+                  </TabsContent>
+
+                  <TabsContent value="updates" className="mt-0 space-y-6">
+                     <div className="relative border-l-2 border-muted ml-3 pl-6 space-y-8">
+                      {project.timeline.length > 0 ? project.timeline.map((item) => (
                         <div key={item.id} className="relative">
                           <div className="absolute -left-[29px] top-1 h-3 w-3 rounded-full bg-primary ring-4 ring-background" />
                           <time className="block text-sm font-medium text-muted-foreground mb-1">{item.date}</time>
                           <h4 className="font-semibold text-sm">{item.title}</h4>
-                          <p className="text-sm text-muted-foreground">{item.description}</p>
+                          <p className="text-sm text-muted-foreground mt-1">{item.description}</p>
                         </div>
-                      ))}
+                      )) : (
+                        <p className="text-sm text-muted-foreground italic">No updates available yet.</p>
+                      )}
                     </div>
-                   ) : (
-                     <p className="text-sm text-muted-foreground italic">No timeline milestones yet.</p>
-                   )}
+                  </TabsContent>
+
+                  <TabsContent value="discussion" className="mt-0 space-y-6">
+                    {/* Add Comment */}
+                    <div className="flex gap-3">
+                      <Avatar className="h-8 w-8">
+                        <AvatarFallback>ME</AvatarFallback>
+                      </Avatar>
+                      <div className="flex-1 space-y-2">
+                        <Textarea 
+                          placeholder="Ask a question or share support..." 
+                          className="min-h-[80px]"
+                          value={commentText}
+                          onChange={(e) => setCommentText(e.target.value)}
+                        />
+                        <div className="flex justify-end">
+                          <Button size="sm" onClick={handlePostComment} disabled={!commentText.trim()}>
+                            <Send className="h-3 w-3 mr-2" /> Post Comment
+                          </Button>
+                        </div>
+                      </div>
+                    </div>
+
+                    <Separator />
+
+                    {/* Comments List */}
+                    <div className="space-y-6">
+                      {project.comments?.length > 0 ? project.comments.map((comment) => (
+                        <div key={comment.id} className="flex gap-3">
+                          <Avatar className="h-8 w-8">
+                            <AvatarFallback>{comment.userName[0]}</AvatarFallback>
+                          </Avatar>
+                          <div className="flex-1 space-y-1">
+                            <div className="flex items-center justify-between">
+                              <span className="font-medium text-sm">{comment.userName}</span>
+                              <span className="text-xs text-muted-foreground">
+                                {new Date(comment.createdAt).toLocaleDateString()}
+                              </span>
+                            </div>
+                            <p className="text-sm text-muted-foreground">{comment.text}</p>
+                            <div className="flex items-center gap-4 mt-1">
+                              <button className="text-xs text-muted-foreground hover:text-primary flex items-center gap-1">
+                                <ThumbsUp className="h-3 w-3" /> {comment.likes}
+                              </button>
+                              <button className="text-xs text-muted-foreground hover:text-primary">Reply</button>
+                            </div>
+                          </div>
+                        </div>
+                      )) : (
+                        <div className="text-center py-8 text-muted-foreground">
+                          <MessageSquare className="h-8 w-8 mx-auto mb-2 opacity-50" />
+                          <p>No comments yet. Be the first to start the discussion!</p>
+                        </div>
+                      )}
+                    </div>
+                  </TabsContent>
+                </div>
+              </ScrollArea>
+              
+              {/* Interaction Bar */}
+              <div className="border-t p-4 flex items-center justify-between bg-background">
+                <Button 
+                  variant={hasLiked ? "secondary" : "ghost"} 
+                  size="sm" 
+                  className={`gap-2 ${hasLiked ? 'text-primary' : 'text-muted-foreground'}`}
+                  onClick={handleLike}
+                >
+                  <ThumbsUp className={`h-4 w-4 ${hasLiked ? 'fill-current' : ''}`} />
+                  {hasLiked ? 'Liked' : 'Like'} ({localLikes})
+                </Button>
+                <div className="text-xs text-muted-foreground">
+                  {project.comments?.length || 0} comments
                 </div>
               </div>
-            </ScrollArea>
+            </Tabs>
           </div>
 
           {/* Sidebar - Right Side */}
-          <div className="w-80 bg-secondary/10 p-6 flex flex-col gap-6 border-l">
+          <div className="w-80 bg-secondary/10 p-6 flex flex-col gap-6 border-l overflow-y-auto">
             <div>
               <div className="flex justify-between items-baseline mb-2">
                 <span className="text-2xl font-bold text-primary">₴{project.currentAmount.toLocaleString()}</span>
@@ -163,7 +266,7 @@ export function ProjectDetailsModal({ project, isOpen, onClose }: ProjectDetails
               </div>
             </div>
 
-            {user?.type === 'DONOR' ? (
+            {user?.type === 'DONOR' || user?.type === 'INVESTOR' ? (
               <Card className="border-primary/20 shadow-sm">
                 <CardHeader className="pb-3">
                   <CardTitle className="text-sm font-medium">Make a Donation</CardTitle>
