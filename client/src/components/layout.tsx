@@ -28,12 +28,20 @@ import { Separator } from '@/components/ui/separator';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 
 export function Layout({ children }: { children: React.ReactNode }) {
-  const [location] = useLocation();
-  const { user, logout } = useAuth();
+  const [location, setLocation] = useLocation();
+  const { user, logout, isLoading } = useAuth();
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
 
-  if (!user) {
-    return <>{children}</>;
+  // Redirect to auth if not logged in
+  if (!isLoading && !user) {
+    setLocation('/auth');
+    return null;
+  }
+
+  if (isLoading) {
+    return <div className="min-h-screen flex items-center justify-center bg-background">
+      <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+    </div>;
   }
 
   const NavItem = ({ href, icon: Icon, label }: { href: string; icon: any; label: string }) => {
@@ -80,12 +88,12 @@ export function Layout({ children }: { children: React.ReactNode }) {
       <div className="p-4 border-t border-sidebar-border mt-auto">
         <div className="flex items-center gap-3 mb-4 px-2">
           <Avatar className="h-9 w-9 border border-sidebar-border">
-            <AvatarImage src={user.avatar} />
-            <AvatarFallback>{user.name.charAt(0)}</AvatarFallback>
+            <AvatarImage src={user?.avatar} />
+            <AvatarFallback>{user?.name.charAt(0)}</AvatarFallback>
           </Avatar>
           <div className="flex flex-col overflow-hidden">
-            <span className="text-sm font-medium truncate">{user.name}</span>
-            <span className="text-xs text-sidebar-foreground/60 truncate capitalize">{user.type.toLowerCase()}</span>
+            <span className="text-sm font-medium truncate">{user?.name}</span>
+            <span className="text-xs text-sidebar-foreground/60 truncate capitalize">{user?.type.toLowerCase()}</span>
           </div>
         </div>
         <Button variant="outline" className="w-full justify-start gap-2 border-sidebar-border text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-foreground" onClick={logout}>
@@ -141,8 +149,8 @@ export function Layout({ children }: { children: React.ReactNode }) {
               <DropdownMenuTrigger asChild>
                 <Button variant="ghost" className="gap-2 px-2">
                   <Avatar className="h-7 w-7">
-                    <AvatarImage src={user.avatar} />
-                    <AvatarFallback>{user.name.charAt(0)}</AvatarFallback>
+                    <AvatarImage src={user?.avatar} />
+                    <AvatarFallback>{user?.name.charAt(0)}</AvatarFallback>
                   </Avatar>
                 </Button>
               </DropdownMenuTrigger>
