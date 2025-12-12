@@ -1,0 +1,178 @@
+Create a crowdfunding/project management platform for NGOs and foundations with Jira-inspired design. This is an MVP built by 2 developers in 2 days.
+
+TECH STACK:
+- Frontend: React SPA with TypeScript
+- Backend: NestJS with TypeScript
+- Database: Prisma ORM (PostgreSQL schema)
+- Auth: bcrypt + @nestjs/jwt
+- UI: Tailwind CSS + shadcn/ui components
+- State: React Context API or Zustand
+
+CORE FEATURES TO IMPLEMENT:
+
+1. AUTHENTICATION & PROFILES
+- Mock "Diia" verification (button that simulates government ID check)
+- Two user types: Organizations and Donors
+- Simple registration form with email/password
+- JWT-based auth with protected routes
+- Basic profile page showing name, type, registration date
+
+2. PROJECT BOARD (Jira-style)
+- Kanban board with columns: "Draft", "Funding", "In Progress", "Completed"
+- Card component showing: project title, funding goal, current amount, progress bar
+- Click card to open detailed modal with full project info
+- Simple drag-and-drop between columns (optional, can be status dropdown)
+- Filter by category tags at top of board
+
+3. PROJECT CREATION FORM
+- Multi-step form (like Jira issue creation):
+  Step 1: Basic info (title, category, description)
+  Step 2: Budget breakdown (goal amount, expense categories)
+  Step 3: Timeline and expected impact
+- Rich text editor for description (simple textarea is fine for MVP)
+- Category tags selection (checkboxes)
+- Submit creates project in "Draft" status
+
+4. PROJECT DETAIL VIEW
+- Modal or side panel (Jira-style)
+- Project header with title, status badge, creator info
+- Funding progress section with visual progress bar
+- Budget breakdown table
+- Timeline with milestones
+- Simple comment section at bottom
+- "Donate" button (mock payment - just updates amount)
+
+5. SEARCH & DISCOVERY
+- Top navigation bar with search input
+- Filter panel on left side: category tags, funding range slider, status
+- Grid/list view toggle for projects
+- Sort options: newest, most funded, ending soon
+
+6. SIMPLE DASHBOARD
+- For Organizations: 
+  * List of their projects with quick stats
+  * "Create Project" button
+  * Total funds raised
+- For Donors:
+  * List of supported projects
+  * Total donated amount
+  * Recommended projects feed
+
+7. MOCK FEATURES (UI only, no real implementation)
+- "Verify with Diia" button shows success checkmark after click
+- "Donate" button opens modal, clicking confirm just adds random amount
+- "Send Message" button shows "Feature coming soon" toast
+- Report generation button downloads mock PDF
+
+DATABASE SCHEMA (Prisma):
+```prisma
+model User {
+  id            String    @id @default(uuid())
+  email         String    @unique
+  password      String
+  name          String
+  userType      UserType
+  isDiiaVerified Boolean  @default(false)
+  createdAt     DateTime  @default(now())
+  projects      Project[]
+  donations     Donation[]
+}
+
+enum UserType {
+  ORGANIZATION
+  DONOR
+}
+
+model Project {
+  id          String   @id @default(uuid())
+  title       String
+  description String
+  category    String[]
+  goalAmount  Float
+  currentAmount Float  @default(0)
+  status      ProjectStatus
+  creatorId   String
+  creator     User     @relation(fields: [creatorId], references: [id])
+  createdAt   DateTime @default(now())
+  donations   Donation[]
+  comments    Comment[]
+}
+
+enum ProjectStatus {
+  DRAFT
+  FUNDING
+  IN_PROGRESS
+  COMPLETED
+}
+
+model Donation {
+  id        String   @id @default(uuid())
+  amount    Float
+  donorId   String
+  donor     User     @relation(fields: [donorId], references: [id])
+  projectId String
+  project   Project  @relation(fields: [projectId], references: [id])
+  createdAt DateTime @default(now())
+}
+
+model Comment {
+  id        String   @id @default(uuid())
+  content   String
+  authorId  String
+  projectId String
+  project   Project  @relation(fields: [projectId], references: [id])
+  createdAt DateTime @default(now())
+}
+```
+
+DESIGN REQUIREMENTS:
+- Use Jira's color scheme: blues (#0052CC), grays, white backgrounds
+- Sidebar navigation like Jira (left side, collapsible)
+- Card-based layouts with subtle shadows
+- Status badges with colors (Draft=gray, Funding=blue, In Progress=yellow, Completed=green)
+- Top navigation bar with search, profile dropdown
+- Clean, professional, data-dense interface
+- Icons from lucide-react
+- Responsive but desktop-first
+
+KEY UI COMPONENTS NEEDED:
+- Project card component
+- Kanban board layout
+- Multi-step form wizard
+- Progress bars and status badges
+- Modal/drawer for project details
+- Simple data tables for budget breakdown
+- Filter sidebar
+- Toast notifications
+
+AUTHENTICATION FLOW:
+1. Login/Register pages (separate routes)
+2. Hash passwords with bcrypt on registration
+3. Generate JWT token on login
+4. Store token in localStorage
+5. Protected route wrapper component
+6. Mock "Diia verification" - just toggles isDiiaVerified flag
+
+MVP SIMPLIFICATIONS:
+- No real payment processing
+- No file uploads (just mock buttons)
+- No real-time updates
+- Basic form validation only
+- Comments are simple text, no replies
+- No email notifications
+- Hardcoded category list
+- Simple in-memory search (no Elasticsearch)
+
+MOCK DATA:
+Generate 8-10 sample projects across different categories with realistic Ukrainian NGO names and goals. Include various funding statuses and amounts.
+
+Please create a working prototype with:
+1. Clean folder structure (features-based)
+2. Reusable components
+3. Basic error handling
+4. Loading states
+5. Responsive layout
+6. TypeScript types/interfaces
+7. At least 3 main pages: Dashboard, Project Board, Project Detail
+
+Focus on core functionality over perfect code. This should look like a functional 2-day MVP that demonstrates the concept clearly.
