@@ -1,5 +1,5 @@
 import type { VercelRequest, VercelResponse } from "@vercel/node";
-import express, { type Express } from "express";
+import express, { type Express, type NextFunction, type Request, type Response } from "express";
 import { registerRoutes } from "../server/routes";
 import { createServer } from "http";
 
@@ -28,7 +28,7 @@ function getExpressApp(): Express {
   registerRoutes(httpServer, app);
 
   // Error handler
-  app.use((err: any, _req: any, res: VercelResponse, _next: any) => {
+  app.use((err: any, _req: Request, res: Response, _next: NextFunction) => {
     const status = err.status || err.statusCode || 500;
     const message = err.message || "Internal Server Error";
     res.status(status).json({ message });
@@ -62,28 +62,29 @@ export default async function handler(
 
   // Handle the request
   return new Promise<void>((resolve) => {
-    const originalEnd = res.end;
-    const originalJson = res.json;
     let finished = false;
 
-    // Override end and json to track completion
-    res.end = function (...args: any[]) {
+    // Override end method to track completion
+    const originalEnd = res.end.bind(res);
+    res.end = function () {
       if (!finished) {
         finished = true;
-        originalEnd.apply(res, args);
+        originalEnd();
         resolve();
       }
       return res;
-    };
+    } as any;
 
-    res.json = function (body: any, ...args: any[]) {
+    // Override json method to track completion
+    const originalJson = res.json.bind(res);
+    res.json = function (body: any) {
       if (!finished) {
         finished = true;
-        originalJson.apply(res, [body, ...args]);
+        originalJson(body);
         resolve();
       }
       return res;
-    };
+    } as any;
 
     // Handle the request through Express
     app(req as any, res as any);
@@ -98,5 +99,13 @@ export default async function handler(
         resolve();
       }
     }, 25000);
+
+    // Ensure resolution when response is sent
+    res.on("finish", () => {
+      if (!finished) {
+        finished = true;
+        resolve();
+      }
+    });
   });
 }
