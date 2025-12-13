@@ -21,7 +21,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
 import { 
   Calendar, CheckCircle2, DollarSign, User, AlertCircle, 
-  MapPin, ThumbsUp, MessageSquare, Send, Trash2 
+  MapPin, ThumbsUp, MessageSquare, Send, Trash2, ChevronLeft, ChevronRight
 } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
 import { useState } from 'react';
@@ -51,6 +51,7 @@ export function ProjectDetailsModal({ project, isOpen, onClose }: ProjectDetails
   const [isConfirming, setIsConfirming] = useState(false);
   const [activeTab, setActiveTab] = useState('details');
   const [commentText, setCommentText] = useState('');
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const { toast } = useToast();
 
   if (!project) return null;
@@ -58,6 +59,8 @@ export function ProjectDetailsModal({ project, isOpen, onClose }: ProjectDetails
   const percent = Math.round((project.currentAmount / project.goalAmount) * 100);
   const isOwner = user?.id === project.creatorId;
   const isLiked = likedProjects.includes(project.id);
+  const hasImages = project.images && project.images.length > 0;
+  const currentImage = hasImages ? project.images[currentImageIndex] : null;
   
   const handleDonate = () => {
     if (!user) return;
@@ -98,6 +101,53 @@ export function ProjectDetailsModal({ project, isOpen, onClose }: ProjectDetails
   return (
     <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
       <DialogContent className="max-w-4xl max-h-[90vh] overflow-hidden flex flex-col p-0 gap-0">
+        {/* Image Gallery */}
+        {hasImages && (
+          <div className="relative h-64 bg-black/10 overflow-hidden">
+            <img 
+              src={currentImage} 
+              alt={`${project.title}-${currentImageIndex}`}
+              className="w-full h-full object-cover"
+            />
+            {project.images!.length > 1 && (
+              <div className="absolute inset-0 flex items-center justify-between px-4">
+                <Button 
+                  variant="ghost" 
+                  size="icon"
+                  className="h-10 w-10 bg-black/50 text-white hover:bg-black/70"
+                  onClick={() => setCurrentImageIndex(prev => (prev - 1 + project.images!.length) % project.images!.length)}
+                >
+                  <ChevronLeft className="h-5 w-5" />
+                </Button>
+                <span className="text-sm text-white bg-black/50 px-3 py-1 rounded-full">
+                  {currentImageIndex + 1}/{project.images!.length}
+                </span>
+                <Button 
+                  variant="ghost" 
+                  size="icon"
+                  className="h-10 w-10 bg-black/50 text-white hover:bg-black/70"
+                  onClick={() => setCurrentImageIndex(prev => (prev + 1) % project.images!.length)}
+                >
+                  <ChevronRight className="h-5 w-5" />
+                </Button>
+              </div>
+            )}
+            {/* Thumbnail strip */}
+            <div className="absolute bottom-0 left-0 right-0 flex gap-2 p-2 bg-gradient-to-t from-black/50 to-transparent">
+              {project.images!.map((img, idx) => (
+                <button
+                  key={idx}
+                  onClick={() => setCurrentImageIndex(idx)}
+                  className={`h-12 w-12 rounded overflow-hidden border-2 transition-all ${
+                    idx === currentImageIndex ? 'border-white' : 'border-transparent opacity-60 hover:opacity-100'
+                  }`}
+                >
+                  <img src={img} alt={`thumbnail-${idx}`} className="w-full h-full object-cover" />
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
         <div className="flex h-full max-h-full">
           {/* Main Content - Left Side */}
           <div className="flex-1 flex flex-col overflow-hidden border-r">

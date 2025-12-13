@@ -17,7 +17,7 @@ import {
 } from '@/components/ui/select';
 import { Card, CardContent } from '@/components/ui/card';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { Trash2, Plus, ArrowRight, ArrowLeft, CheckCircle2 } from 'lucide-react';
+import { Trash2, Plus, ArrowRight, ArrowLeft, CheckCircle2, Image, X } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 
 interface CreateProjectWizardProps {
@@ -36,6 +36,7 @@ export function CreateProjectWizard({ onClose }: CreateProjectWizardProps) {
     title: '',
     description: '',
     category: '',
+    images: [] as string[],
     budget: [{ id: '1', category: 'General', amount: 0 }],
   });
 
@@ -65,6 +66,7 @@ export function CreateProjectWizard({ onClose }: CreateProjectWizardProps) {
       goalAmount: totalGoal,
       status: 'DRAFT',
       creatorId: 'current-user-id', // Handled in context
+      images: formData.images.length > 0 ? formData.images : undefined,
       timeline: [], // Empty for MVP
       budget: formData.budget.map(b => ({ ...b, amount: Number(b.amount) })),
     });
@@ -90,6 +92,30 @@ export function CreateProjectWizard({ onClose }: CreateProjectWizardProps) {
     const newBudget = [...formData.budget];
     newBudget[index] = { ...newBudget[index], [field]: value };
     setFormData(prev => ({ ...prev, budget: newBudget }));
+  };
+
+  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files;
+    if (files) {
+      Array.from(files).forEach(file => {
+        const reader = new FileReader();
+        reader.onloadend = () => {
+          const base64 = reader.result as string;
+          setFormData(prev => ({
+            ...prev,
+            images: [...prev.images, base64]
+          }));
+        };
+        reader.readAsDataURL(file);
+      });
+    }
+  };
+
+  const removeImage = (index: number) => {
+    setFormData(prev => ({
+      ...prev,
+      images: prev.images.filter((_, i) => i !== index)
+    }));
   };
 
   const totalBudget = formData.budget.reduce((acc, curr) => acc + Number(curr.amount), 0);
@@ -149,6 +175,41 @@ export function CreateProjectWizard({ onClose }: CreateProjectWizardProps) {
                   value={formData.description}
                   onChange={e => setFormData({...formData, description: e.target.value})}
                 />
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="images">Project Images</Label>
+                <div className="border-2 border-dashed rounded-lg p-4 hover:bg-secondary/10 transition-colors cursor-pointer">
+                  <input 
+                    id="images"
+                    type="file" 
+                    multiple 
+                    accept="image/*"
+                    onChange={handleImageUpload}
+                    className="hidden"
+                  />
+                  <label htmlFor="images" className="cursor-pointer flex flex-col items-center gap-2">
+                    <Image className="h-6 w-6 text-muted-foreground" />
+                    <span className="text-sm text-muted-foreground">Click to add project images</span>
+                    <span className="text-xs text-muted-foreground">or drag and drop</span>
+                  </label>
+                </div>
+                
+                {formData.images.length > 0 && (
+                  <div className="grid grid-cols-4 gap-2 mt-2">
+                    {formData.images.map((img, idx) => (
+                      <div key={idx} className="relative group">
+                        <img src={img} alt={`preview-${idx}`} className="w-full h-20 object-cover rounded" />
+                        <button
+                          onClick={() => removeImage(idx)}
+                          className="absolute -top-2 -right-2 bg-destructive text-white rounded-full p-1 opacity-0 group-hover:opacity-100 transition-opacity"
+                        >
+                          <X className="h-3 w-3" />
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                )}
               </div>
             </div>
           )}

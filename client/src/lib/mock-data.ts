@@ -53,6 +53,7 @@ export interface Project {
   timeline: ProjectTimeline[];
   budget: Budget[];
   coverImage?: string;
+  images?: string[]; // Array of project images
   location: string; // Hromada/Community
   likes: number;
   comments: Comment[];
@@ -190,6 +191,10 @@ export const MOCK_PROJECTS: Project[] = [
       { id: 'b1', category: 'Vehicles', amount: 900000 },
       { id: 'b2', category: 'Tools & Equipment', amount: 400000 },
       { id: 'b3', category: 'Logistics', amount: 200000 }
+    ],
+    images: [
+      'https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=800&q=80',
+      'https://images.unsplash.com/photo-1581092163562-40038e57e0a2?w=800&q=80'
     ]
   },
   {
@@ -213,6 +218,10 @@ export const MOCK_PROJECTS: Project[] = [
     budget: [
       { id: 'b1', category: 'Medical Supplies', amount: 450000 },
       { id: 'b2', category: 'Logistics', amount: 50000 }
+    ],
+    images: [
+      'https://images.unsplash.com/photo-1631217314831-c6227db76b6e?w=800&q=80',
+      'https://images.unsplash.com/photo-1576091160550-2173dba999ef?w=800&q=80'
     ]
   },
   {
@@ -231,7 +240,11 @@ export const MOCK_PROJECTS: Project[] = [
     isRecommended: true,
     comments: [],
     timeline: [],
-    budget: []
+    budget: [],
+    images: [
+      'https://images.unsplash.com/photo-1565182999555-8f3c8d29b5d8?w=800&q=80',
+      'https://images.unsplash.com/photo-1552664730-d307ca884978?w=800&q=80'
+    ]
   },
   {
     id: 'proj-4',
@@ -248,7 +261,11 @@ export const MOCK_PROJECTS: Project[] = [
     likes: 210,
     comments: [],
     timeline: [],
-    budget: []
+    budget: [],
+    images: [
+      'https://images.unsplash.com/photo-1539987267141-e2f6e8f7e6f9?w=800&q=80',
+      'https://images.unsplash.com/photo-1594938298603-c8148c4dae35?w=800&q=80'
+    ]
   },
   {
     id: 'proj-5',
@@ -265,7 +282,11 @@ export const MOCK_PROJECTS: Project[] = [
     likes: 15,
     comments: [],
     timeline: [],
-    budget: []
+    budget: [],
+    images: [
+      'https://images.unsplash.com/photo-1583511655857-d19db992cb74?w=800&q=80',
+      'https://images.unsplash.com/photo-1587300411107-ec8b7a3b05b9?w=800&q=80'
+    ]
   },
   {
     id: 'proj-6',
@@ -283,7 +304,11 @@ export const MOCK_PROJECTS: Project[] = [
     isRecommended: true,
     comments: [],
     timeline: [],
-    budget: []
+    budget: [],
+    images: [
+      'https://images.unsplash.com/photo-1516534775068-bb571a6e9e8d?w=800&q=80',
+      'https://images.unsplash.com/photo-1503387762519-52582b742d0f?w=800&q=80'
+    ]
   },
   {
     id: 'proj-7',
@@ -300,7 +325,11 @@ export const MOCK_PROJECTS: Project[] = [
     likes: 56,
     comments: [],
     timeline: [],
-    budget: []
+    budget: [],
+    images: [
+      'https://images.unsplash.com/photo-1585776245865-b0ac9957dc21?w=800&q=80',
+      'https://images.unsplash.com/photo-1576091160629-beeca4ba7c24?w=800&q=80'
+    ]
   },
   {
     id: 'proj-8',
@@ -318,6 +347,10 @@ export const MOCK_PROJECTS: Project[] = [
     isRecommended: true,
     comments: [],
     timeline: [],
-    budget: []
+    budget: [],
+    images: [
+      'https://images.unsplash.com/photo-1598659921341-b542e4a2e31c?w=800&q=80',
+      'https://images.unsplash.com/photo-1553904270-5338193fe163?w=800&q=80'
+    ]
   }
 ];
