@@ -43,7 +43,7 @@ export default function AuthPage() {
       <div className="w-full max-w-md space-y-8">
         <div className="flex flex-col items-center text-center space-y-2">
           <div className="h-12 w-12 rounded-xl flex items-center justify-center">
-            <img src="https://lh3.google.com/d/1vPXpO-csD_L_W0NvLnuwULNzFurYTh7Y" alt="Yedno" className="h-7 w-7" />
+            <img src="/assets/logos/logo.svg" alt="Yedno" className="h-7 w-7" />
           </div>
           <h1 className="text-3xl font-bold tracking-tight text-slate-900 dark:text-slate-100">Yedno</h1>
           <p className="text-muted-foreground">Professional project management for NGOs</p>

@@ -54,7 +54,7 @@ export default function LandingPage() {
             </div>
             <div className="flex flex-col items-center gap-2">
               <div className="p-3 rounded-full">
-                <img src="https://lh3.google.com/d/1vPXpO-csD_L_W0NvLnuwULNzFurYTh7Y" alt="Verified" className="h-6 w-6" />
+                <img src="/assets/logos/logo.svg" alt="Verified" className="h-6 w-6" />
               </div>
               <h3 className="text-3xl font-bold">100%</h3>
               <p className="text-muted-foreground">Verified Reports</p>
@@ -232,7 +232,7 @@ export default function LandingPage() {
         <div className="mx-auto max-w-7xl px-6 lg:px-8 flex flex-col md:flex-row justify-between items-center gap-6">
           <div className="flex items-center gap-2">
             <div className="h-8 w-8 rounded-md flex items-center justify-center">
-              <img src="https://lh3.google.com/d/1vPXpO-csD_L_W0NvLnuwULNzFurYTh7Y" alt="Yedno" className="h-5 w-5" />
+              <img src="/assets/logos/logo.svg" alt="Yedno" className="h-5 w-5" />
             </div>
             <span className="font-bold text-white text-lg">Yedno</span>
           </div>

@@ -70,7 +70,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
     <div className="flex flex-col h-full bg-sidebar text-sidebar-foreground border-r border-sidebar-border w-64">
       <div className="p-4 flex items-center gap-3">
         <div className="h-8 w-8 rounded-md flex items-center justify-center">
-          <img src="https://lh3.google.com/d/1vPXpO-csD_L_W0NvLnuwULNzFurYTh7Y" alt="Yedno" className="h-5 w-5" />
+          <img src="/assets/logos/logo.svg" alt="Yedno" className="h-5 w-5" />
         </div>
         <span className="font-bold text-lg tracking-tight">Yedno</span>
       </div>
