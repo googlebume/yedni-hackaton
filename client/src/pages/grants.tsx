@@ -136,7 +136,7 @@ export default function GrantsPage() {
             </CardHeader>
             <CardContent>
               <p className="text-primary-foreground/90 mb-4">
-                Want to support reliable NGOs? Publish your grant program on FundFlow and get access to verified applicants.
+                Want to support reliable NGOs? Publish your grant program on Yedno and get access to verified applicants.
               </p>
               <Button variant="secondary" className="w-full text-primary font-semibold">
                 Post a Grant

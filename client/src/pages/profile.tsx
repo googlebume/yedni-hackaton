@@ -10,7 +10,7 @@ import { ProjectCard } from '@/components/project-card';
 import { ProjectDetailsModal } from '@/components/project-details-modal';
 import { useState } from 'react';
 import { Project } from '@/lib/mock-data';
-import { ShieldCheck, Mail, Calendar, MapPin, Heart } from 'lucide-react';
+import { Mail, Calendar, MapPin, Heart } from 'lucide-react';
 
 export default function ProfilePage() {
   const { user, likedProjects } = useAuth();
@@ -54,7 +54,7 @@ export default function ProfilePage() {
 
             {user.isDiiaVerified && (
               <div className="inline-flex items-center gap-2 bg-blue-50 text-blue-700 px-3 py-1 rounded-full text-sm font-medium">
-                <ShieldCheck className="h-4 w-4" /> Verified via Diia
+                <img src="/src/assets/logos/logo.svg" alt="Verified" className="h-4 w-4" /> Verified via Diia
               </div>
             )}
           </div>

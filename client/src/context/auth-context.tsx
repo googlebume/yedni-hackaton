@@ -23,8 +23,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   // Simulate session check
   useEffect(() => {
-    const storedUser = localStorage.getItem('fundflow_user');
-    const storedLikes = localStorage.getItem('fundflow_likes');
+    const storedUser = localStorage.getItem('yedno_user');
+    const storedLikes = localStorage.getItem('yedno_likes');
     
     if (storedUser) {
       setUser(JSON.parse(storedUser));
@@ -52,7 +52,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       };
 
       setUser(userToLogin);
-      localStorage.setItem('fundflow_user', JSON.stringify(userToLogin));
+      localStorage.setItem('yedno_user', JSON.stringify(userToLogin));
       setIsLoading(false);
       
       toast({
@@ -76,19 +76,19 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       };
       
       setUser(newUser);
-      localStorage.setItem('fundflow_user', JSON.stringify(newUser));
+      localStorage.setItem('yedno_user', JSON.stringify(newUser));
       setIsLoading(false);
 
       toast({
         title: "Account created",
-        description: "Welcome to FundFlow!",
+        description: "Welcome to Yedno!",
       });
     }, 800);
   };
 
   const logout = () => {
     setUser(null);
-    localStorage.removeItem('fundflow_user');
+    localStorage.removeItem('yedno_user');
     toast({
       title: "Logged out",
       description: "See you soon!",
@@ -102,7 +102,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     setTimeout(() => {
       const updatedUser = { ...user, isDiiaVerified: true };
       setUser(updatedUser);
-      localStorage.setItem('fundflow_user', JSON.stringify(updatedUser));
+      localStorage.setItem('yedno_user', JSON.stringify(updatedUser));
       setIsLoading(false);
       
       toast({
@@ -119,7 +119,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         ? prev.filter(id => id !== projectId)
         : [...prev, projectId];
       
-      localStorage.setItem('fundflow_likes', JSON.stringify(newLikes));
+      localStorage.setItem('yedno_likes', JSON.stringify(newLikes));
       return newLikes;
     });
   };

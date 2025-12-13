@@ -11,7 +11,6 @@ import {
   Settings, 
   Bell,
   User,
-  ShieldCheck,
   DollarSign
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -70,10 +69,10 @@ export function Layout({ children }: { children: React.ReactNode }) {
   const SidebarContent = () => (
     <div className="flex flex-col h-full bg-sidebar text-sidebar-foreground border-r border-sidebar-border w-64">
       <div className="p-4 flex items-center gap-3">
-        <div className="h-8 w-8 bg-primary rounded-md flex items-center justify-center">
-          <ShieldCheck className="text-primary-foreground h-5 w-5" />
+        <div className="h-8 w-8 rounded-md flex items-center justify-center">
+          <img src="/src/assets/logos/logo.svg" alt="Yedno" className="h-5 w-5" />
         </div>
-        <span className="font-bold text-lg tracking-tight">FundFlow</span>
+        <span className="font-bold text-lg tracking-tight">Yedno</span>
       </div>
       
       <div className="px-4 py-2">

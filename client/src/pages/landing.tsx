@@ -5,7 +5,7 @@ import { Badge } from '@/components/ui/badge';
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/components/ui/carousel';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { MOCK_PROJECTS, MOCK_USERS } from '@/lib/mock-data';
-import { ArrowRight, ShieldCheck, TrendingUp, Users, Heart, MapPin, MessageSquare, ThumbsUp } from 'lucide-react';
+import { ArrowRight, TrendingUp, Users, Heart, MapPin, MessageSquare, ThumbsUp } from 'lucide-react';
 import { Progress } from '@/components/ui/progress';
 
 export default function LandingPage() {
@@ -16,7 +16,7 @@ export default function LandingPage() {
     <div className="min-h-screen bg-background">
       {/* Hero Section */}
       <section className="relative overflow-hidden bg-slate-900 py-24 sm:py-32">
-        <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?q=80&w=2070&auto=format&fit=crop')] bg-cover bg-center opacity-10" />
+        <div className="absolute inset-0 bg-[url('https://scontent.fiev7-4.fna.fbcdn.net/v/t39.30808-6/482246739_1146264880629702_5503806174509962294_n.jpg?stp=cp6_dst-jpg_tt6&_nc_cat=107&ccb=1-7&_nc_sid=833d8c&_nc_ohc=GM-IXqpzx4AQ7kNvwHCQwjg&_nc_oc=Adn_bnbsqY2M-vUaGcKbGh-bZOWYYcCvfvEiczQvhWdoWWzI9JEReq5Omy_brUrnT30&_nc_zt=23&_nc_ht=scontent.fiev7-4.fna&_nc_gid=7LEvWndKW9RuSC0r7l9sbw&oh=00_AfkAtfClkek1oQe1NQuY1d87F3GeeXck3i-mrO4OinZAzw&oe=6942E0A3')] bg-cover bg-center opacity-10" />
         <div className="relative mx-auto max-w-7xl px-6 lg:px-8">
           <div className="mx-auto max-w-2xl text-center">
             <h1 className="text-4xl font-bold tracking-tight text-white sm:text-6xl">
@@ -53,8 +53,8 @@ export default function LandingPage() {
               <p className="text-muted-foreground">Funds Raised</p>
             </div>
             <div className="flex flex-col items-center gap-2">
-              <div className="p-3 bg-primary/10 rounded-full text-primary">
-                <ShieldCheck className="h-6 w-6" />
+              <div className="p-3 rounded-full">
+                <img src="/src/assets/logos/logo.svg" alt="Verified" className="h-6 w-6" />
               </div>
               <h3 className="text-3xl font-bold">100%</h3>
               <p className="text-muted-foreground">Verified Reports</p>
@@ -231,10 +231,10 @@ export default function LandingPage() {
       <footer className="bg-slate-950 py-12 text-slate-400 text-sm">
         <div className="mx-auto max-w-7xl px-6 lg:px-8 flex flex-col md:flex-row justify-between items-center gap-6">
           <div className="flex items-center gap-2">
-            <div className="h-8 w-8 bg-primary rounded-md flex items-center justify-center text-white">
-              <ShieldCheck className="h-5 w-5" />
+            <div className="h-8 w-8 rounded-md flex items-center justify-center">
+              <img src="/src/assets/logos/logo.svg" alt="Yedno" className="h-5 w-5" />
             </div>
-            <span className="font-bold text-white text-lg">FundFlow</span>
+            <span className="font-bold text-white text-lg">Yedno</span>
           </div>
           <div className="flex gap-8">
             <a href="#" className="hover:text-white transition-colors">About</a>
@@ -242,7 +242,7 @@ export default function LandingPage() {
             <a href="#" className="hover:text-white transition-colors">Partners</a>
             <a href="#" className="hover:text-white transition-colors">Contact</a>
           </div>
-          <p>© 2025 FundFlow. All rights reserved.</p>
+          <p>© 2025 Yedno. All rights reserved.</p>
         </div>
       </footer>
     </div>
