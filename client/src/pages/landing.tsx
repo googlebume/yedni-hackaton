@@ -88,7 +88,7 @@ export default function LandingPage() {
             {featuredProjects.map(project => (
               <Card key={project.id} className="group hover:shadow-lg transition-all duration-300 border-border/50 cursor-pointer overflow-hidden">
                 {project.images && project.images.length > 0 && (
-                  <CardImage src={project.images[0]} alt={project.title} className="h-40 rounded-t-xl" />
+                  <CardImage src={project.images[0]} alt={project.title} className="h-36 sm:h-40 md:h-44 lg:h-48 rounded-t-xl" />
                 )}
                 <CardHeader>
                   <div className="flex justify-between items-start mb-2">
@@ -196,9 +196,9 @@ export default function LandingPage() {
             backgroundPosition: 'center'
           }}>
             {/* Dark overlay */}
-            <div className="absolute inset-0 bg-black/60" />
+            <div className="absolute inset-0 bg-black/40 lg:bg-black/60" />
             
-            <div className="relative mx-auto max-w-md text-center lg:mx-0 lg:flex-auto lg:py-32 lg:text-left">
+            <div className="relative z-10 mx-auto max-w-md text-center lg:mx-0 lg:flex-auto lg:py-32 lg:text-left">
               <h2 className="text-3xl font-bold tracking-tight text-white sm:text-4xl">
                 Looking for funding? <br />
                 Apply for grants.
@@ -219,7 +219,7 @@ export default function LandingPage() {
                 </Link>
               </div>
             </div>
-            <div className="relative mt-16 h-80 lg:mt-8 z-10">
+            <div className="hidden lg:block relative mt-16 h-80 z-10">
               {/* Mock UI for grants */}
               <div className="absolute left-0 top-0 w-[57rem] max-w-none rounded-md bg-white/5 ring-1 ring-white/10 p-4">
                 <div className="flex gap-4 mb-4">

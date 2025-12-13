@@ -12,9 +12,10 @@ import { useState, useEffect } from 'react';
 interface ProjectCardProps {
   project: Project;
   onClick: (project: Project) => void;
+  showImage?: boolean; // When false (e.g., in Kanban), image preview is hidden
 }
 
-export function ProjectCard({ project, onClick }: ProjectCardProps) {
+export function ProjectCard({ project, onClick, showImage = true }: ProjectCardProps) {
   const {
     attributes,
     listeners,
@@ -67,8 +68,8 @@ export function ProjectCard({ project, onClick }: ProjectCardProps) {
         }}
       >
         {/* Image Preview Section */}
-        {hasImages && currentImage && (
-          <div className="relative h-32 overflow-hidden bg-secondary/10">
+        {showImage !== false && hasImages && currentImage && (
+          <div className="relative h-24 sm:h-32 overflow-hidden bg-secondary/10">
             <img 
               src={currentImage} 
               alt={`${project.title}-${currentImageIndex}`}

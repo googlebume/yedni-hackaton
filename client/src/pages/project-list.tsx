@@ -189,7 +189,7 @@ export default function ProjectDiscoveryPage() {
               ))}
             </div>
           ) : (
-            <div className="flex flex-col items-center justify-center h-64 text-center">
+            <div className="flex flex-col items-center justify-center h-48 sm:h-64 text-center">
               <div className="bg-muted/50 p-4 rounded-full mb-4">
                 <Search className="h-8 w-8 text-muted-foreground" />
               </div>

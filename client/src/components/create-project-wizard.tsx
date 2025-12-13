@@ -196,10 +196,10 @@ export function CreateProjectWizard({ onClose }: CreateProjectWizardProps) {
                 </div>
                 
                 {formData.images.length > 0 && (
-                  <div className="grid grid-cols-4 gap-2 mt-2">
+                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 mt-2">
                     {formData.images.map((img, idx) => (
                       <div key={idx} className="relative group">
-                        <img src={img} alt={`preview-${idx}`} className="w-full h-20 object-cover rounded" />
+                        <img src={img} alt={`preview-${idx}`} className="w-full h-20 sm:h-24 object-cover rounded" />
                         <button
                           onClick={() => removeImage(idx)}
                           className="absolute -top-2 -right-2 bg-destructive text-white rounded-full p-1 opacity-0 group-hover:opacity-100 transition-opacity"
@@ -225,7 +225,7 @@ export function CreateProjectWizard({ onClose }: CreateProjectWizardProps) {
               
               <div className="space-y-3">
                 {formData.budget.map((item, index) => (
-                  <div key={item.id} className="flex gap-2 items-start">
+                  <div key={item.id} className="flex flex-col sm:flex-row gap-2 items-start">
                     <div className="flex-1 space-y-1">
                       <Input 
                         placeholder="Item name" 

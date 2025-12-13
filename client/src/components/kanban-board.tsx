@@ -132,8 +132,7 @@ export function KanbanBoard({ onProjectClick }: KanbanBoardProps) {
                     <ProjectCard 
                       key={project.id} 
                       project={project} 
-                      onClick={onProjectClick}
-                    />
+                      onClick={onProjectClick}                      showImage={false}                    />
                   ))}
                   {/* Placeholder for empty columns to make them droppable easily */}
                   {columns[col.id].length === 0 && (

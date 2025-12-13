@@ -103,7 +103,7 @@ export function ProjectDetailsModal({ project, isOpen, onClose }: ProjectDetails
       <DialogContent className="max-w-4xl max-h-[90vh] overflow-hidden flex flex-col p-0 gap-0">
         {/* Image Gallery */}
         {hasImages && (
-          <div className="relative h-96 sm:h-[500px] md:h-[600px] lg:h-[700px] bg-black/10 overflow-hidden">
+          <div className="relative h-[40vh] sm:h-[50vh] md:h-[60vh] lg:h-[70vh] bg-black/10 overflow-hidden">
             <img 
               src={currentImage} 
               alt={`${project.title}-${currentImageIndex}`}
@@ -133,12 +133,12 @@ export function ProjectDetailsModal({ project, isOpen, onClose }: ProjectDetails
               </div>
             )}
             {/* Thumbnail strip */}
-            <div className="absolute bottom-0 left-0 right-0 flex gap-2 p-2 bg-gradient-to-t from-black/50 to-transparent">
+            <div className="absolute bottom-0 left-0 right-0 flex gap-2 p-2 bg-gradient-to-t from-black/50 to-transparent overflow-x-auto">
               {project.images!.map((img, idx) => (
                 <button
                   key={idx}
                   onClick={() => setCurrentImageIndex(idx)}
-                  className={`h-12 w-12 rounded overflow-hidden border-2 transition-all ${
+                  className={`h-10 w-10 sm:h-12 sm:w-12 rounded overflow-hidden border-2 transition-all ${
                     idx === currentImageIndex ? 'border-white' : 'border-transparent opacity-60 hover:opacity-100'
                   }`}
                 >
