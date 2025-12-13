@@ -9,6 +9,8 @@ interface AuthContextType {
   register: (name: string, email: string, type: UserType) => void;
   verifyDiia: () => void;
   isLoading: boolean;
+  likedProjects: string[];
+  toggleLikeProject: (projectId: string) => void;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -16,14 +18,21 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [likedProjects, setLikedProjects] = useState<string[]>([]);
   const { toast } = useToast();
 
   // Simulate session check
   useEffect(() => {
     const storedUser = localStorage.getItem('fundflow_user');
+    const storedLikes = localStorage.getItem('fundflow_likes');
+    
     if (storedUser) {
       setUser(JSON.parse(storedUser));
     }
+    if (storedLikes) {
+      setLikedProjects(JSON.parse(storedLikes));
+    }
+    
     setIsLoading(false);
   }, []);
 
@@ -104,8 +113,19 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     }, 1500);
   };
 
+  const toggleLikeProject = (projectId: string) => {
+    setLikedProjects(prev => {
+      const newLikes = prev.includes(projectId) 
+        ? prev.filter(id => id !== projectId)
+        : [...prev, projectId];
+      
+      localStorage.setItem('fundflow_likes', JSON.stringify(newLikes));
+      return newLikes;
+    });
+  };
+
   return (
-    <AuthContext.Provider value={{ user, login, logout, register, verifyDiia, isLoading }}>
+    <AuthContext.Provider value={{ user, login, logout, register, verifyDiia, isLoading, likedProjects, toggleLikeProject }}>
       {children}
     </AuthContext.Provider>
   );

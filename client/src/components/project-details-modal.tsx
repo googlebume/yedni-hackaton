@@ -19,9 +19,24 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
-import { Calendar, CheckCircle2, DollarSign, User, AlertCircle, MapPin, ThumbsUp, MessageSquare, Send } from 'lucide-react';
+import { 
+  Calendar, CheckCircle2, DollarSign, User, AlertCircle, 
+  MapPin, ThumbsUp, MessageSquare, Send, Trash2 
+} from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
 import { useState } from 'react';
+import { useToast } from '@/hooks/use-toast';
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 
 interface ProjectDetailsModalProps {
   project: Project | null;
@@ -30,19 +45,19 @@ interface ProjectDetailsModalProps {
 }
 
 export function ProjectDetailsModal({ project, isOpen, onClose }: ProjectDetailsModalProps) {
-  const { donate } = useProjects();
-  const { user } = useAuth();
+  const { donate, addComment, deleteProject, toggleLike } = useProjects();
+  const { user, likedProjects, toggleLikeProject } = useAuth();
   const [donationAmount, setDonationAmount] = useState<string>('500');
   const [isConfirming, setIsConfirming] = useState(false);
   const [activeTab, setActiveTab] = useState('details');
   const [commentText, setCommentText] = useState('');
-  // Local state for likes/comments interaction demo
-  const [localLikes, setLocalLikes] = useState(project?.likes || 0);
-  const [hasLiked, setHasLiked] = useState(false);
+  const { toast } = useToast();
 
   if (!project) return null;
 
   const percent = Math.round((project.currentAmount / project.goalAmount) * 100);
+  const isOwner = user?.id === project.creatorId;
+  const isLiked = likedProjects.includes(project.id);
   
   const handleDonate = () => {
     if (!user) return;
@@ -54,19 +69,30 @@ export function ProjectDetailsModal({ project, isOpen, onClose }: ProjectDetails
   };
 
   const handleLike = () => {
-    if (hasLiked) {
-      setLocalLikes(prev => prev - 1);
-      setHasLiked(false);
-    } else {
-      setLocalLikes(prev => prev + 1);
-      setHasLiked(true);
+    if (!user) {
+      toast({ title: "Please login to like projects" });
+      return;
     }
+    toggleLikeProject(project.id);
+    toggleLike(project.id); // Update global count
   };
 
   const handlePostComment = () => {
-    if (!commentText.trim()) return;
-    // In a real app, this would call an API
+    if (!commentText.trim() || !user) return;
+    
+    addComment(project.id, {
+      userId: user.id,
+      userName: user.name,
+      userAvatar: user.avatar,
+      text: commentText,
+    });
+    
     setCommentText('');
+  };
+
+  const handleDelete = () => {
+    deleteProject(project.id);
+    onClose();
   };
 
   return (
@@ -76,22 +102,49 @@ export function ProjectDetailsModal({ project, isOpen, onClose }: ProjectDetails
           {/* Main Content - Left Side */}
           <div className="flex-1 flex flex-col overflow-hidden border-r">
             <div className="p-6 pb-4">
-              <div className="flex items-center gap-2 mb-4">
-                <Badge variant={
-                  project.status === 'COMPLETED' ? 'default' :
-                  project.status === 'FUNDING' ? 'secondary' : 'outline'
-                } className="rounded-md px-2.5 py-0.5">
-                  {project.status.replace('_', ' ')}
-                </Badge>
-                <span className="text-sm text-muted-foreground flex items-center gap-1">
-                  <Calendar className="h-3 w-3" />
-                  {new Date(project.createdAt).toLocaleDateString()}
-                </span>
-                <span className="text-sm text-muted-foreground mx-1">•</span>
-                <span className="text-sm text-muted-foreground flex items-center gap-1">
-                  <MapPin className="h-3 w-3" />
-                  {project.location || 'Ukraine'}
-                </span>
+              <div className="flex items-center justify-between mb-2">
+                <div className="flex items-center gap-2">
+                  <Badge variant={
+                    project.status === 'COMPLETED' ? 'default' :
+                    project.status === 'FUNDING' ? 'secondary' : 'outline'
+                  } className="rounded-md px-2.5 py-0.5">
+                    {project.status.replace('_', ' ')}
+                  </Badge>
+                  <span className="text-sm text-muted-foreground flex items-center gap-1">
+                    <Calendar className="h-3 w-3" />
+                    {new Date(project.createdAt).toLocaleDateString()}
+                  </span>
+                  <span className="text-sm text-muted-foreground mx-1">•</span>
+                  <span className="text-sm text-muted-foreground flex items-center gap-1">
+                    <MapPin className="h-3 w-3" />
+                    {project.location || 'Ukraine'}
+                  </span>
+                </div>
+                
+                {isOwner && (
+                  <AlertDialog>
+                    <AlertDialogTrigger asChild>
+                      <Button variant="ghost" size="sm" className="text-destructive hover:bg-destructive/10">
+                        <Trash2 className="h-4 w-4 mr-1" /> Delete
+                      </Button>
+                    </AlertDialogTrigger>
+                    <AlertDialogContent>
+                      <AlertDialogHeader>
+                        <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+                        <AlertDialogDescription>
+                          This action cannot be undone. This will permanently delete your project
+                          and remove all data associated with it.
+                        </AlertDialogDescription>
+                      </AlertDialogHeader>
+                      <AlertDialogFooter>
+                        <AlertDialogCancel>Cancel</AlertDialogCancel>
+                        <AlertDialogAction onClick={handleDelete} className="bg-destructive hover:bg-destructive/90">
+                          Delete Project
+                        </AlertDialogAction>
+                      </AlertDialogFooter>
+                    </AlertDialogContent>
+                  </AlertDialog>
+                )}
               </div>
               
               <DialogTitle className="text-2xl font-bold mb-2">{project.title}</DialogTitle>
@@ -181,17 +234,18 @@ export function ProjectDetailsModal({ project, isOpen, onClose }: ProjectDetails
                     {/* Add Comment */}
                     <div className="flex gap-3">
                       <Avatar className="h-8 w-8">
-                        <AvatarFallback>ME</AvatarFallback>
+                        <AvatarFallback>{user?.name?.[0] || 'G'}</AvatarFallback>
                       </Avatar>
                       <div className="flex-1 space-y-2">
                         <Textarea 
-                          placeholder="Ask a question or share support..." 
+                          placeholder={user ? "Ask a question or share support..." : "Login to comment"}
                           className="min-h-[80px]"
                           value={commentText}
                           onChange={(e) => setCommentText(e.target.value)}
+                          disabled={!user}
                         />
                         <div className="flex justify-end">
-                          <Button size="sm" onClick={handlePostComment} disabled={!commentText.trim()}>
+                          <Button size="sm" onClick={handlePostComment} disabled={!commentText.trim() || !user}>
                             <Send className="h-3 w-3 mr-2" /> Post Comment
                           </Button>
                         </div>
@@ -214,7 +268,7 @@ export function ProjectDetailsModal({ project, isOpen, onClose }: ProjectDetails
                                 {new Date(comment.createdAt).toLocaleDateString()}
                               </span>
                             </div>
-                            <p className="text-sm text-muted-foreground">{comment.text}</p>
+                            <p className="text-sm text-muted-foreground whitespace-pre-wrap">{comment.text}</p>
                             <div className="flex items-center gap-4 mt-1">
                               <button className="text-xs text-muted-foreground hover:text-primary flex items-center gap-1">
                                 <ThumbsUp className="h-3 w-3" /> {comment.likes}
@@ -237,13 +291,13 @@ export function ProjectDetailsModal({ project, isOpen, onClose }: ProjectDetails
               {/* Interaction Bar */}
               <div className="border-t p-4 flex items-center justify-between bg-background">
                 <Button 
-                  variant={hasLiked ? "secondary" : "ghost"} 
+                  variant={isLiked ? "secondary" : "ghost"} 
                   size="sm" 
-                  className={`gap-2 ${hasLiked ? 'text-primary' : 'text-muted-foreground'}`}
+                  className={`gap-2 ${isLiked ? 'text-primary' : 'text-muted-foreground'}`}
                   onClick={handleLike}
                 >
-                  <ThumbsUp className={`h-4 w-4 ${hasLiked ? 'fill-current' : ''}`} />
-                  {hasLiked ? 'Liked' : 'Like'} ({localLikes})
+                  <ThumbsUp className={`h-4 w-4 ${isLiked ? 'fill-current' : ''}`} />
+                  {isLiked ? 'Liked' : 'Like'} ({project.likes + (isLiked ? 1 : 0)})
                 </Button>
                 <div className="text-xs text-muted-foreground">
                   {project.comments?.length || 0} comments

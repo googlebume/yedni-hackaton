@@ -13,6 +13,7 @@ import ProjectBoardPage from "@/pages/project-board";
 import ProjectDiscoveryPage from "@/pages/project-list";
 import LandingPage from "@/pages/landing";
 import GrantsPage from "@/pages/grants";
+import ProfilePage from "@/pages/profile";
 
 function Router() {
   return (
@@ -28,6 +29,7 @@ function Router() {
             <Route path="/projects" component={ProjectBoardPage} />
             <Route path="/discovery" component={ProjectDiscoveryPage} />
             <Route path="/grants" component={GrantsPage} />
+            <Route path="/profile" component={ProfilePage} />
             <Route component={NotFound} />
           </Switch>
         </Layout>
