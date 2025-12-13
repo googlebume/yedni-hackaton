@@ -54,7 +54,7 @@ export default function ProfilePage() {
 
             {user.isDiiaVerified && (
               <div className="inline-flex items-center gap-2 bg-blue-50 text-blue-700 px-3 py-1 rounded-full text-sm font-medium">
-                <img src="/src/assets/logos/logo.svg" alt="Verified" className="h-4 w-4" /> Verified via Diia
+                <img src="https://drive.google.com/uc?export=view&id=1vPXpO-csD_L_W0NvLnuwULNzFurYTh7Y" alt="Verified" className="h-4 w-4" /> Verified via Diia
               </div>
             )}
           </div>

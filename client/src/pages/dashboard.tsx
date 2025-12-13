@@ -64,7 +64,7 @@ export default function Dashboard() {
               className="border-primary/20 text-primary hover:bg-primary/5 gap-2"
               onClick={verifyDiia}
             >
-              <img src="/src/assets/logos/logo.svg" alt="Verify" className="h-4 w-4" />
+              <img src="https://drive.google.com/uc?export=view&id=1vPXpO-csD_L_W0NvLnuwULNzFurYTh7Y" alt="Verify" className="h-4 w-4" />
               Verify with Diia
             </Button>
           )}
@@ -79,7 +79,7 @@ export default function Dashboard() {
       {!user.isDiiaVerified && (
         <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-4 flex items-start gap-4">
           <div className="bg-blue-100 dark:bg-blue-800 p-2 rounded-full">
-            <img src="/src/assets/logos/logo.svg" alt="Verification" className="h-5 w-5" />
+            <img src="https://drive.google.com/uc?export=view&id=1vPXpO-csD_L_W0NvLnuwULNzFurYTh7Y" alt="Verification" className="h-5 w-5" />
           </div>
           <div>
             <h3 className="font-semibold text-blue-900 dark:text-blue-100">Verification Required</h3>
