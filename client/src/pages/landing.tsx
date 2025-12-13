@@ -7,6 +7,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { MOCK_PROJECTS, MOCK_USERS } from '@/lib/mock-data';
 import { ArrowRight, TrendingUp, Users, Heart, MapPin, MessageSquare, ThumbsUp } from 'lucide-react';
 import { Progress } from '@/components/ui/progress';
+import backgroundPc from '@/assets/bacgrounds/bacground-pc.jpg';
 
 export default function LandingPage() {
   const featuredProjects = MOCK_PROJECTS.filter(p => p.isRecommended || p.status === 'FUNDING').slice(0, 6);
@@ -189,8 +190,15 @@ export default function LandingPage() {
       {/* Grants Teaser */}
       <section className="py-24">
         <div className="mx-auto max-w-7xl px-6 lg:px-8">
-          <div className="relative rounded-3xl bg-slate-900 overflow-hidden px-6 py-16 shadow-2xl sm:px-16 md:pt-24 lg:flex lg:gap-x-20 lg:px-24 lg:pt-0">
-            <div className="mx-auto max-w-md text-center lg:mx-0 lg:flex-auto lg:py-32 lg:text-left">
+          <div className="relative rounded-3xl bg-slate-900 overflow-hidden px-6 py-16 shadow-2xl sm:px-16 md:pt-24 lg:flex lg:gap-x-20 lg:px-24 lg:pt-0" style={{
+            backgroundImage: `url(${backgroundPc})`,
+            backgroundSize: 'cover',
+            backgroundPosition: 'center'
+          }}>
+            {/* Dark overlay */}
+            <div className="absolute inset-0 bg-black/60" />
+            
+            <div className="relative mx-auto max-w-md text-center lg:mx-0 lg:flex-auto lg:py-32 lg:text-left">
               <h2 className="text-3xl font-bold tracking-tight text-white sm:text-4xl">
                 Looking for funding? <br />
                 Apply for grants.
@@ -211,7 +219,7 @@ export default function LandingPage() {
                 </Link>
               </div>
             </div>
-            <div className="relative mt-16 h-80 lg:mt-8">
+            <div className="relative mt-16 h-80 lg:mt-8 z-10">
               {/* Mock UI for grants */}
               <div className="absolute left-0 top-0 w-[57rem] max-w-none rounded-md bg-white/5 ring-1 ring-white/10 p-4">
                 <div className="flex gap-4 mb-4">
