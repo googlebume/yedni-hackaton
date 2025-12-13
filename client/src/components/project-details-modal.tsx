@@ -103,7 +103,7 @@ export function ProjectDetailsModal({ project, isOpen, onClose }: ProjectDetails
       <DialogContent className="max-w-4xl max-h-[90vh] overflow-hidden flex flex-col p-0 gap-0">
         {/* Image Gallery */}
         {hasImages && (
-          <div className="relative h-64 bg-black/10 overflow-hidden">
+          <div className="relative h-96 sm:h-[500px] md:h-[600px] lg:h-[700px] bg-black/10 overflow-hidden">
             <img 
               src={currentImage} 
               alt={`${project.title}-${currentImageIndex}`}

@@ -1,6 +1,6 @@
 import { Link } from 'wouter';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardImage, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/components/ui/carousel';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
@@ -85,7 +85,10 @@ export default function LandingPage() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {featuredProjects.map(project => (
-              <Card key={project.id} className="group hover:shadow-lg transition-all duration-300 border-border/50 cursor-pointer">
+              <Card key={project.id} className="group hover:shadow-lg transition-all duration-300 border-border/50 cursor-pointer overflow-hidden">
+                {project.images && project.images.length > 0 && (
+                  <CardImage src={project.images[0]} alt={project.title} className="h-40 rounded-t-xl" />
+                )}
                 <CardHeader>
                   <div className="flex justify-between items-start mb-2">
                     <Badge variant="secondary" className="font-normal">

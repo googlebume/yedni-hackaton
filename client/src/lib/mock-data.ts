@@ -193,8 +193,8 @@ export const MOCK_PROJECTS: Project[] = [
       { id: 'b3', category: 'Logistics', amount: 200000 }
     ],
     images: [
-      'https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=800&q=80',
-      'https://images.unsplash.com/photo-1581092163562-40038e57e0a2?w=800&q=80'
+      'https://images.pexels.com/photos/3807517/pexels-photo-3807517.jpeg?w=800&q=80',
+      'https://images.pexels.com/photos/3938021/pexels-photo-3938021.jpeg?w=800&q=80'
     ]
   },
   {
@@ -220,8 +220,8 @@ export const MOCK_PROJECTS: Project[] = [
       { id: 'b2', category: 'Logistics', amount: 50000 }
     ],
     images: [
-      'https://images.unsplash.com/photo-1631217314831-c6227db76b6e?w=800&q=80',
-      'https://images.unsplash.com/photo-1576091160550-2173dba999ef?w=800&q=80'
+      'https://images.pexels.com/photos/3807517/pexels-photo-3807517.jpeg?w=800&q=80',
+      'https://images.pexels.com/photos/3962286/pexels-photo-3962286.jpeg?w=800&q=80'
     ]
   },
   {
@@ -242,8 +242,8 @@ export const MOCK_PROJECTS: Project[] = [
     timeline: [],
     budget: [],
     images: [
-      'https://images.unsplash.com/photo-1565182999555-8f3c8d29b5d8?w=800&q=80',
-      'https://images.unsplash.com/photo-1552664730-d307ca884978?w=800&q=80'
+      'https://images.pexels.com/photos/3171837/pexels-photo-3171837.jpeg?w=800&q=80',
+      'https://images.pexels.com/photos/3776931/pexels-photo-3776931.jpeg?w=800&q=80'
     ]
   },
   {
@@ -263,8 +263,8 @@ export const MOCK_PROJECTS: Project[] = [
     timeline: [],
     budget: [],
     images: [
-      'https://images.unsplash.com/photo-1539987267141-e2f6e8f7e6f9?w=800&q=80',
-      'https://images.unsplash.com/photo-1594938298603-c8148c4dae35?w=800&q=80'
+      'https://images.pexels.com/photos/3807511/pexels-photo-3807511.jpeg?w=800&q=80',
+      'https://images.pexels.com/photos/3962282/pexels-photo-3962282.jpeg?w=800&q=80'
     ]
   },
   {
@@ -284,8 +284,8 @@ export const MOCK_PROJECTS: Project[] = [
     timeline: [],
     budget: [],
     images: [
-      'https://images.unsplash.com/photo-1583511655857-d19db992cb74?w=800&q=80',
-      'https://images.unsplash.com/photo-1587300411107-ec8b7a3b05b9?w=800&q=80'
+      'https://images.pexels.com/photos/3932589/pexels-photo-3932589.jpeg?w=800&q=80',
+      'https://images.pexels.com/photos/4553207/pexels-photo-4553207.jpeg?w=800&q=80'
     ]
   },
   {
@@ -306,8 +306,8 @@ export const MOCK_PROJECTS: Project[] = [
     timeline: [],
     budget: [],
     images: [
-      'https://images.unsplash.com/photo-1516534775068-bb571a6e9e8d?w=800&q=80',
-      'https://images.unsplash.com/photo-1503387762519-52582b742d0f?w=800&q=80'
+      'https://images.pexels.com/photos/3808517/pexels-photo-3808517.jpeg?w=800&q=80',
+      'https://images.pexels.com/photos/3992949/pexels-photo-3992949.jpeg?w=800&q=80'
     ]
   },
   {
@@ -327,8 +327,8 @@ export const MOCK_PROJECTS: Project[] = [
     timeline: [],
     budget: [],
     images: [
-      'https://images.unsplash.com/photo-1585776245865-b0ac9957dc21?w=800&q=80',
-      'https://images.unsplash.com/photo-1576091160629-beeca4ba7c24?w=800&q=80'
+      'https://images.pexels.com/photos/3862635/pexels-photo-3862635.jpeg?w=800&q=80',
+      'https://images.pexels.com/photos/3995315/pexels-photo-3995315.jpeg?w=800&q=80'
     ]
   },
   {
@@ -349,8 +349,8 @@ export const MOCK_PROJECTS: Project[] = [
     timeline: [],
     budget: [],
     images: [
-      'https://images.unsplash.com/photo-1598659921341-b542e4a2e31c?w=800&q=80',
-      'https://images.unsplash.com/photo-1553904270-5338193fe163?w=800&q=80'
+      'https://images.pexels.com/photos/87651/earth-blue-planet-globe-planet-87651.jpeg?w=800&q=80',
+      'https://images.pexels.com/photos/3945683/pexels-photo-3945683.jpeg?w=800&q=80'
     ]
   }
 ];
