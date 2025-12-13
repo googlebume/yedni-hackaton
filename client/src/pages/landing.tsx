@@ -85,7 +85,7 @@ export default function LandingPage() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {featuredProjects.map(project => (
-              <Card key={project.id} className="group hover:shadow-lg transition-all duration-300 border-border/50">
+              <Card key={project.id} className="group hover:shadow-lg transition-all duration-300 border-border/50 cursor-pointer">
                 <CardHeader>
                   <div className="flex justify-between items-start mb-2">
                     <Badge variant="secondary" className="font-normal">

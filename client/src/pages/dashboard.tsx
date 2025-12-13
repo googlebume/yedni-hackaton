@@ -230,7 +230,7 @@ export default function Dashboard() {
                 {likedProjectsList.length > 0 ? (
                   <div className="space-y-4">
                     {likedProjectsList.map(p => (
-                      <div key={p.id} className="flex items-center justify-between text-sm border-b pb-2 last:border-0" onClick={() => setSelectedProject(p)}>
+                      <div key={p.id} className="flex items-center justify-between text-sm border-b pb-2 last:border-0 cursor-pointer hover:bg-secondary/10 rounded px-2 py-1 transition-colors" onClick={() => setSelectedProject(p)}>
                         <span className="font-medium truncate max-w-[180px] cursor-pointer hover:underline">{p.title}</span>
                         <Badge variant="outline" className="text-[10px]">{p.status}</Badge>
                       </div>
