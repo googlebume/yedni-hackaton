@@ -179,7 +179,8 @@ export default function ProjectDiscoveryPage() {
 
         <ScrollArea className="flex-1">
           {filteredProjects.length > 0 ? (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 pb-6">
+            <div className="grid gap-4 pb-6 [grid-template-columns:repeat(auto-fit,minmax(280px,1fr))]">
+
               {filteredProjects.map(project => (
                 <ProjectCard 
                   key={project.id} 

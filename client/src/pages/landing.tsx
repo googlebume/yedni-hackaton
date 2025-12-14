@@ -26,7 +26,7 @@ export default function LandingPage() {
             <p className="mt-6 text-lg leading-8 text-gray-300">
               The unified platform for NGOs, donors, and investors. Transparent project management, verified reporting, and direct impact.
             </p>
-            <div className="mt-10 flex items-center justify-center gap-x-6">
+            <div className="mt-10 flex flex-wrap items-center justify-center gap-4">
               <Link href="/discovery">
                 <Button size="lg" className="bg-primary hover:bg-primary/90 text-white gap-2">
                   Explore Projects <ArrowRight className="h-4 w-4" />
@@ -154,7 +154,7 @@ export default function LandingPage() {
             <h2 className="text-3xl font-bold tracking-tight">Trusted Partners</h2>
             <p className="text-muted-foreground mt-2">NGOs and international donors working with us</p>
           </div>
-          
+
           <Carousel className="w-full max-w-5xl mx-auto">
             <CarouselContent>
               {investors.map(org => (
@@ -181,8 +181,26 @@ export default function LandingPage() {
                 </CarouselItem>
               ))}
             </CarouselContent>
-            <CarouselPrevious />
-            <CarouselNext />
+            <CarouselPrevious
+              className="
+                absolute
+                left-0
+                top-1/2
+                -translate-y-1/2
+                -translate-x-1/2
+                z-10
+              "
+            />
+            <CarouselNext
+              className="
+                absolute
+                right-0
+                top-1/2
+                -translate-y-1/2
+                translate-x-1/2
+                z-10
+              "
+            />
           </Carousel>
         </div>
       </section>
@@ -197,7 +215,7 @@ export default function LandingPage() {
           }}>
             {/* Dark overlay */}
             <div className="absolute inset-0 bg-black/40 lg:bg-black/60" />
-            
+
             <div className="relative z-10 mx-auto max-w-md text-center lg:mx-0 lg:flex-auto lg:py-32 lg:text-left">
               <h2 className="text-3xl font-bold tracking-tight text-white sm:text-4xl">
                 Looking for funding? <br />
@@ -206,7 +224,7 @@ export default function LandingPage() {
               <p className="mt-6 text-lg leading-8 text-gray-300">
                 International donors and foundations offer grants for reconstruction, education, and humanitarian aid. Verified NGOs can apply directly.
               </p>
-              <div className="mt-10 flex items-center justify-center gap-x-6 lg:justify-start">
+              <div className="mt-10 flex flex-wrap items-center justify-center gap-4 lg:justify-start">
                 <Link href="/grants">
                   <Button size="lg" className="bg-white text-slate-900 hover:bg-gray-100">
                     Browse Grants
